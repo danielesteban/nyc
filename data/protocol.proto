@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message Vector2 {
+  float x = 1;
+  float y = 2;
+}
+
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message Building {
+  Vector2 position = 1;
+  Vector3 scale = 2;
+  float rotation = 3;
+}
+
+message Buildings {
+  repeated Building buildings = 1;
+}

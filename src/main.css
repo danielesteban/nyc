@@ -1,0 +1,109 @@
+:root {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  background: #1a1a1a;
+  color: #eee;
+  cursor: default;
+  font-family: 'Roboto Condensed', monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.125rem;
+  touch-action: none;
+  overflow: hidden;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -webkit-overflow-scrolling: auto;
+}
+
+:root, body, #viewport {
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  align-items: center;
+  background: #1a1a1a;
+  border: 1px solid #000;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-weight: inherit;
+  justify-content: center;
+  margin: 0;
+  outline: none;
+  padding: 0.5rem;
+}
+
+a {
+  color: inherit;
+}
+
+canvas {
+  image-rendering: pixelated;
+  vertical-align: middle;
+}
+
+h5 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: inherit;
+  line-height: 2.25rem;
+
+}
+
+input[type="checkbox"], input[type="range"] {
+  accent-color: #393;
+  cursor: pointer;
+}
+
+input[type="number"], input[type="text"], select {
+  background: #1a1a1a;
+  border: 1px solid #000;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  color: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  padding: 0.25rem;
+  width: 100%;
+  outline: none;
+}
+
+progress {
+  accent-color: #393;
+}
+
+select {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 0.875rem;
+}
+
+::-webkit-scrollbar-track {
+  border-left: 1px solid #2d2d2d;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #424242;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #5e5e5e;
+}

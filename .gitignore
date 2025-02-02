@@ -1,0 +1,5 @@
+dist
+node_modules
+data/data.geojson
+data/protocol.d.ts
+data/protocol.js
