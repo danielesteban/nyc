@@ -5,13 +5,13 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import { Buildings } from 'core/Buildings';
-import { Grid } from 'core/Grid';
 import { Input } from 'core/Input';
-import { Starfield } from 'core/Starfield';
 import { camera, clock, dom, renderer, scene } from 'core/Viewport';
 import BuildingsData from '../data/data.bin?no-inline';
 import { Buildings as BuildingsProtocol } from '../data/protocol.js';
+import { Buildings } from 'meshes/Buildings';
+import { Grid } from 'meshes/Grid';
+import { Starfield } from 'meshes/Starfield';
 
 camera.position.set(0, 1000, 0);
 camera.lookAt(0, 0, -5000);
