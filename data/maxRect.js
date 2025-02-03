@@ -1,6 +1,11 @@
 import { parentPort } from 'worker_threads';
 import * as turf from '@turf/turf';
 
+// I found this code at:
+// https://louisz.medium.com/how-to-find-the-maximum-rectangle-within-a-convex-gis-polygon-in-javascript-16364e8f7f4
+// Seems to work fine for most cases. It can prolly be optimized, tho.
+// But since it only needs to run offline once I haven't bothered.
+
 function maxRect(coords) {
   let polygon = turf.polygon([coords]);
 
