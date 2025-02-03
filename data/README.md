@@ -8,4 +8,4 @@ Place it at: `data/data.geojson`
 node process.js
 ```
 
-Output will be generated at: `public/buildings.bin`
+Output will be generated at: `data/data.bin`

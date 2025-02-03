@@ -10,7 +10,8 @@ import { Grid } from 'core/Grid';
 import { Input } from 'core/Input';
 import { Starfield } from 'core/Starfield';
 import { camera, clock, dom, renderer, scene } from 'core/Viewport';
-import { Buildings as Data } from '../data/protocol.js';
+import BuildingsData from '../data/data.bin?no-inline';
+import { Buildings as BuildingsProtocol } from '../data/protocol.js';
 
 camera.position.set(0, 1000, 0);
 camera.lookAt(0, 0, -5000);
@@ -49,8 +50,8 @@ renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
 });
 
-fetch('/buildings.bin').then((res) => res.arrayBuffer()).then((buf) => {
-  const data = Data.decode(new Uint8Array(buf));
+fetch(BuildingsData).then((res) => res.arrayBuffer()).then((buf) => {
+  const data = BuildingsProtocol.decode(new Uint8Array(buf));
   scene.add(new Buildings(data.buildings));
   document.body.removeChild(document.getElementById('loading')!);
 });

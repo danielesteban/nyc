@@ -3,6 +3,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => ({
+  assetsInclude: ['**/*.bin'],
   esbuild: mode === 'production' ? {
     drop: ['console', 'debugger'],
     legalComments: 'none',
