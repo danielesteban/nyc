@@ -1,4 +1,4 @@
-[nyc](https://github.com/danielesteban/nyc)
+[nyc](https://nyc.gatunes.com)
 ==
 
 ```bash

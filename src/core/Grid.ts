@@ -72,7 +72,7 @@ export class Grid extends Mesh {
             gl_FragColor.rgb = mix( gl_FragColor.rgb, vec3(0.0), fFactor );
             #include <fog_fragment>
             `
-          );;
+          );
       };
       Grid.material = material;
     }

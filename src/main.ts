@@ -52,4 +52,5 @@ renderer.setAnimationLoop(() => {
 fetch('/buildings.bin').then((res) => res.arrayBuffer()).then((buf) => {
   const data = Data.decode(new Uint8Array(buf));
   scene.add(new Buildings(data.buildings));
+  document.body.removeChild(document.getElementById('loading')!);
 });
