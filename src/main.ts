@@ -1,23 +1,27 @@
 import './main.css';
-import { Buildings } from 'core/Buildings';
-import { Grid } from 'core/Grid';
-import { Input } from 'core/Input';
-import { camera, clock, dom, renderer, scene } from 'core/Viewport';
 import {
-  // BufferGeometry,
   Color,
   FogExp2,
-  // Line,
-  // LineBasicMaterial,
   Vector2,
   Vector3,
 } from 'three';
+import { Buildings } from 'core/Buildings';
+import { Grid } from 'core/Grid';
+import { Input } from 'core/Input';
+import { Starfield } from 'core/Starfield';
+import { camera, clock, dom, renderer, scene } from 'core/Viewport';
 import { Buildings as Data } from '../data/protocol.js';
 
-camera.position.set(0, 40, 0);
+camera.position.set(0, 1000, 0);
+camera.lookAt(0, 0, -5000);
 
-scene.background = new Color('#336688');
-scene.fog = new FogExp2(0x336688, 0.001);
+scene.background = new Color('#001133');
+scene.fog = new FogExp2(0x001133, 0.00005);
+
+const grid = new Grid();
+scene.add(grid);
+const starfield = new Starfield();
+scene.add(starfield);
 
 const input = new Input(dom);
 const look = new Vector2();
@@ -35,29 +39,15 @@ renderer.setAnimationLoop(() => {
   input.getMovement(camera, movement);
   const step = input.getSpeed() * (input.getRunning() ? 2 : 1) * delta;
   camera.position.addScaledVector(movement, step);
+  camera.position.y = Math.max(camera.position.y, 1);
+  grid.position.set(
+    camera.position.x,
+    0,
+    camera.position.z
+  );
+  starfield.position.copy(grid.position);
   renderer.render(scene, camera);
 });
-
-scene.add(new Grid());
-
-// const polygonMat = new LineBasicMaterial({
-//   color: 0x0000ff
-// });
-// const rectMat = new LineBasicMaterial({
-//   color: 0xff0000
-// });
-
-// data.forEach(({ polygon, rect }) => {
-//   [polygon, rect].forEach((points, i) => {
-//     const p = points.map(([x, y]) => new Vector3(x, y, 0));
-//     const line = new Line(
-//       new BufferGeometry().setFromPoints(p),
-//       i === 0 ? polygonMat : rectMat
-//     );
-//     line.rotation.x = Math.PI * 0.5;
-//     scene.add(line);
-//   });
-// });
 
 fetch('/buildings.bin').then((res) => res.arrayBuffer()).then((buf) => {
   const data = Data.decode(new Uint8Array(buf));

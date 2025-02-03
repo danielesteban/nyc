@@ -32,7 +32,7 @@ const stream = fs.createReadStream(path.join(__dirname, 'data.geojson'))
   ) {
     return;
   }
-  // if (!building.geometry.coordinates[0].find((p) => (turf.distance(origin, p, {units: 'kilometers'}) < radius))) {
+  // if (!building.geometry.coordinates[0].some((p) => (turf.distance(origin, p, {units: 'kilometers'}) < radius))) {
   //   return;
   // }
   queue.push(building);
@@ -93,7 +93,7 @@ stream.on('end', () => finish());
 const finish = () => {
   if (
     stream.readable
-    || workers.find((worker) => worker.isBusy)
+    || workers.some((worker) => worker.isBusy)
   ) {
     return;
   }
@@ -110,7 +110,10 @@ const finish = () => {
     building.position.x -= origin.x;
     building.position.y -= origin.y;
   });
-  fs.writeFileSync(path.join(__dirname, '..', 'public', 'buildings.bin'), Buildings.encode(output).finish());
+  fs.writeFileSync(
+    path.join(__dirname, '..', 'public', 'buildings.bin'),
+    Buildings.encode(output).finish()
+  );
   console.log('\ndone!');
   process.exit();
 };

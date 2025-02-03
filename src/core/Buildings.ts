@@ -89,7 +89,7 @@ export class Buildings extends Mesh {
         )
         .replace('#include <uv_vertex>',
           /* glsl */ `
-          vUv = vec2(uv.x * (face == 0 || face == 1 ? scale.z : scale.x), uv.y * scale.y) / 3.0;
+          vUv = vec2(uv.x * (face == 0 || face == 1 ? scale.z : scale.x), uv.y * scale.y) / 10.0;
           `
         );
       parameters.fragmentShader = parameters.fragmentShader

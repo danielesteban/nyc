@@ -36,7 +36,7 @@ export class Input extends EventDispatcher<{ button: { button: number }; }> {
     };
     this.isLocked = false;
     this.target = target;
-    this.speed = 50;
+    this.speed = 1000;
     window.addEventListener('gamepadconnected', this.gamepadconnected.bind(this));
     window.addEventListener('gamepaddisconnected', this.gamepaddisconnected.bind(this));
     target.addEventListener('pointerdown', this.pointerdown.bind(this));
@@ -116,8 +116,8 @@ export class Input extends EventDispatcher<{ button: { button: number }; }> {
     return desktop.isRunning || (gamepad.index !== -1 && gamepad.state[10]);
   }
 
-  private static minSpeed = Math.log(10);
-  private static maxSpeed = Math.log(100);
+  private static minSpeed = Math.log(100);
+  private static maxSpeed = Math.log(5000);
   private static speedRange = Input.maxSpeed - Input.minSpeed;
   getSpeed() {
     return this.speed;
