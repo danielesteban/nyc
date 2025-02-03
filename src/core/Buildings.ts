@@ -2,11 +2,15 @@ import {
   BufferGeometry,
   BufferAttribute,
   Color,
+  DataTexture,
+  FloatType,
   InstancedBufferAttribute,
   InstancedBufferGeometry,
   Mesh,
   MeshBasicMaterial,
   PlaneGeometry,
+  RedFormat,
+  RepeatWrapping,
 } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -56,6 +60,24 @@ export class Buildings extends Mesh {
     if (!Buildings.material) {
       const material = new MeshBasicMaterial({ vertexColors: true });
       material.onBeforeCompile = (parameters) => {
+        parameters.defines = {
+          FLOOR_WIDTH: '5.0',
+          FLOOR_HEIGHT: '10.0',
+        };
+        parameters.uniforms.noise = {
+          value: (() => {
+            const size = 256;
+            const data = new Float32Array(size * size);
+            for (let i = 0; i < size * size; i++) {
+              data[i] = Math.random();
+            }
+            const texture = new DataTexture(data, size, size, RedFormat, FloatType);
+            texture.needsUpdate = true;
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            return texture;
+          })(),
+        };
+        parameters.uniforms.time = Buildings.time;
         parameters.vertexShader = parameters.vertexShader
           .replace('#include <common>',
             /* glsl */ `
@@ -64,6 +86,7 @@ export class Buildings extends Mesh {
             attribute vec3 offset;
             attribute vec3 scale;
             attribute float rotation;
+            flat varying int vId;
             varying vec2 vUv;
             mat3 rotateY(float angle) {
               float s = sin(angle);
@@ -79,18 +102,26 @@ export class Buildings extends Mesh {
           .replace('#include <begin_vertex>',
             /* glsl */ `
             vec3 transformed = vec3(rotateY(rotation) * (position * scale) + offset);
+            vId = gl_InstanceID;
             `
           )
           .replace('#include <uv_vertex>',
             /* glsl */ `
-            vUv = vec2(uv.x * (face == 0 || face == 1 ? scale.z : scale.x), uv.y * scale.y) / 10.0;
+            vec2 uvScale = vec2(face == 0 || face == 1 ? scale.z : scale.x, scale.y);
+            vec2 floorSize = vec2(FLOOR_WIDTH + mod(float(gl_InstanceID), 5.0), FLOOR_HEIGHT);
+            uvScale -= mod(uvScale, floorSize);
+            uvScale = max(uvScale, floorSize * vec2(1.0, 3.0));
+            vUv = uv * uvScale / floorSize;
             `
           );
         parameters.fragmentShader = parameters.fragmentShader
           .replace('#include <common>',
             /* glsl */ `
             #include <common>
+            flat varying int vId;
             varying vec2 vUv;
+            uniform sampler2D noise;
+            uniform float time;
             `
           )
           .replace('#include <color_fragment>',
@@ -101,13 +132,14 @@ export class Buildings extends Mesh {
             if (isFirstFloor) {
               light = 0.1 * max(vUv.y, 0.2);
             } else {
-              vec2 floor = vec2(mod(vUv.x, 1.0), mod(vUv.y, 1.0));
-              bool isWindow = floor.x > 0.2 && floor.x < 0.8 && floor.y > 0.45 && floor.y < 0.55;
-              bool isCornice = floor.y < 0.25 || floor.y > 0.75;
+              vec2 uv = vec2(mod(vUv.x, 1.0), mod(vUv.y, 1.0));
+              bool isWindow = uv.x > 0.2 && uv.x < 0.8 && uv.y > 0.45 && uv.y < 0.55;
+              bool isCornice = uv.y < 0.25 || uv.y > 0.75;
               if (isCornice) {
                 light = 0.1;
               } else if (isWindow) {
-                light = 0.9;
+                vec2 id = vec2(floor(vUv.x + float(vId)) + 0.5, floor(vUv.y) + 0.5);
+                light = 0.5 + sin(time + texture(noise, id / vec2(256.0)).r * 10.0) * 0.4;
               }
             }
             diffuseColor *= light;
@@ -117,6 +149,12 @@ export class Buildings extends Mesh {
       Buildings.material = material;
     }
     return Buildings.material;
+  }
+
+  private static time = { value: 0 };
+
+  static setTime(value: number) {
+    Buildings.time.value = value;
   }
 
   constructor(data: IBuilding[]) {

@@ -30,6 +30,7 @@ const movement = new Vector3();
 
 renderer.setAnimationLoop(() => {
   const delta = Math.min(clock.getDelta(), 0.2);
+  Buildings.setTime(clock.oldTime / 1000);
   input.getLook(look, delta);
   if (look.x !== 0 || look.y !== 0) {
     camera.rotation.y += look.x;
