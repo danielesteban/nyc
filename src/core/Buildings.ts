@@ -83,7 +83,7 @@ export class Buildings extends Mesh {
             /* glsl */ `
             #include <common>
             attribute int face;
-            attribute vec3 offset;
+            attribute vec2 offset;
             attribute vec3 scale;
             attribute float rotation;
             flat varying int vId;
@@ -101,7 +101,7 @@ export class Buildings extends Mesh {
           )
           .replace('#include <begin_vertex>',
             /* glsl */ `
-            vec3 transformed = vec3(rotateY(rotation) * (position * scale) + offset);
+            vec3 transformed = vec3(rotateY(rotation) * (position * scale) + vec3(offset.x, 0.0, offset.y));
             vId = gl_InstanceID;
             `
           )
@@ -169,7 +169,7 @@ export class Buildings extends Mesh {
     const color = new Color();
     const simplex = new SimplexNoise();
     const colors = new Float32Array(geometry.instanceCount * 3);
-    const offsets = new Float32Array(geometry.instanceCount * 3);
+    const offsets = new Float32Array(geometry.instanceCount * 2);
     const scales = new Float32Array(geometry.instanceCount * 3);
     const rotations = new Float32Array(geometry.instanceCount);
     data.forEach(({ position, scale, rotation }, i) => {
@@ -181,16 +181,15 @@ export class Buildings extends Mesh {
       colors[i * 3] = color.r;
       colors[i * 3 + 1] = color.g;
       colors[i * 3 + 2] = color.b;
-      offsets[i * 3] = position!.x!;
-      offsets[i * 3 + 1] = 0;
-      offsets[i * 3 + 2] = position!.y!;
+      offsets[i * 2] = position!.x!;
+      offsets[i * 2 + 1] = position!.y!;
       scales[i * 3] = scale!.x!;
       scales[i * 3 + 1] = scale!.y!;
       scales[i * 3 + 2] = scale!.z!;
       rotations[i] = rotation!;
     });
     geometry.setAttribute('color', new InstancedBufferAttribute(colors, 3));
-    geometry.setAttribute('offset', new InstancedBufferAttribute(offsets, 3));
+    geometry.setAttribute('offset', new InstancedBufferAttribute(offsets, 2));
     geometry.setAttribute('scale', new InstancedBufferAttribute(scales, 3));
     geometry.setAttribute('rotation', new InstancedBufferAttribute(rotations, 1));
     super(geometry, Buildings.getMaterial());
