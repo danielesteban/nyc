@@ -116,9 +116,9 @@ export class Input extends EventDispatcher<{ button: { button: number }; }> {
     return desktop.isRunning || (gamepad.index !== -1 && gamepad.state[10]);
   }
 
-  private static minSpeed = Math.log(100);
-  private static maxSpeed = Math.log(5000);
-  private static speedRange = Input.maxSpeed - Input.minSpeed;
+  private static readonly minSpeed = Math.log(100);
+  private static readonly maxSpeed = Math.log(5000);
+  private static readonly speedRange = Input.maxSpeed - Input.minSpeed;
   getSpeed() {
     return this.speed;
   }

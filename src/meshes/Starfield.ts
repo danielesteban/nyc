@@ -7,8 +7,8 @@ import {
 } from 'three';
 
 export class Starfield extends Points {
-  private static count = 10000;
-  private static radius = 100000;
+  private static readonly count = 10000;
+  private static readonly radius = 100000;
 
   private static geometry?: BufferGeometry;
 

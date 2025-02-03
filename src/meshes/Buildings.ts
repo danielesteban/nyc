@@ -151,7 +151,7 @@ export class Buildings extends Mesh {
     return Buildings.material;
   }
 
-  private static time = { value: 0 };
+  private static readonly time = { value: 0 };
 
   static setTime(value: number) {
     Buildings.time.value = value;
