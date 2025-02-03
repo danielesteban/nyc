@@ -111,7 +111,7 @@ const finish = () => {
     building.position.y -= origin.y;
   });
   fs.writeFileSync(
-    path.join(__dirname, 'buildings.bin'),
+    path.join(__dirname, 'data.bin'),
     Buildings.encode(output).finish()
   );
   console.log('\ndone!');
